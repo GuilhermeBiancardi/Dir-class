@@ -49,18 +49,23 @@ class Diretorio {
         return $arq;
     }
 
-    private function listFileFolderSubFolder($diretorio, $diretorio_base) {
-        foreach ($diretorio as $file) {
-            if (!$file->isDot() && $file->isDir()) {
-                $dname = $file->getFilename();
-                $retorno = $this->listMethod($diretorio_base . '/' . $dname, 2);
-                is_array($retorno) ? $arq[$dname] = $retorno : $arq[$dname] = array();
+    private function listFileFolderSubFolder($diretorio, $diretorio_base, $tipo) {
+        $arq = array();
+        if ($tipo == "LIST_ALL" || $tipo == "FOLDER_ONLY") {
+            foreach ($diretorio as $file) {
+                if (!$file->isDot() && $file->isDir()) {
+                    $dname = $file->getFilename();
+                    $retorno = $this->listMethod($diretorio_base . '/' . $dname, "SUB_FOLDERS", $tipo);
+                    is_array($retorno) ? $arq[$dname] = $retorno : $arq[$dname] = array();
+                }
             }
         }
-        foreach ($diretorio as $file) {
-            if ($file->isFile()) {
-                $dname = $file->getFilename();
-                $arq[] = $dname;
+        if ($tipo == "LIST_ALL" || $tipo == "FILE_ONLY") {
+            foreach ($diretorio as $file) {
+                if ($file->isFile()) {
+                    $dname = $file->getFilename();
+                    $arq[] = $dname;
+                }
             }
         }
         return $arq;
@@ -97,10 +102,10 @@ class Diretorio {
     public function listMethod($diretorio_base, $nivel = "THIS_FOLDER", $tipo = "LIST_ALL") {
         if (is_dir($diretorio_base)) {
             $diretorio = new DirectoryIterator($diretorio_base);
-            if ($nivel == 1) {
+            if ($nivel == "THIS_FOLDER") {
                 $arq = $this->listType($diretorio, $tipo);
             } else {
-                $arq = $this->listFileFolderSubFolder($diretorio, $diretorio_base);
+                $arq = $this->listFileFolderSubFolder($diretorio, $diretorio_base, $tipo);
             }
             $dir = $arq;
             return $dir;

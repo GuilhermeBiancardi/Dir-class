@@ -3,13 +3,13 @@
 ## Inclusão da Classe
 
 ```php
-include_once "diretorio/Dir.class.php";
+include_once "diretorio/Diretorio.class.php";
 ```
 
 ## Chamada da Classe
 
 ```php
-$dir = new Dir();
+$dir = new Diretorio();
 ```
 
 ### Listando diretórios
